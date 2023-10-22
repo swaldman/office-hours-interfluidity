@@ -122,7 +122,7 @@ def sendThisWeeksMail(
  
 def createInitialMarkdown(isoLocalDate : String) : String =
   s"""|# Office Hours ${isoLocalDate}
-      |---
+      |
       |_Start your edits!_
       |""".stripMargin
 
@@ -157,3 +157,13 @@ def plaintextMailContent( isoLocalDate : String, newNoteUrl : String, poem : Ran
           |""".stripMargin
     header + poem.lines.mkString("\n")      
   mainText + increaseIndent(4)(poemPart)
+
+val PoemItalicsRegex = """_(.*)_""".r
+val SingleSpaceRegex = """ """.r
+val EmDashRegex      = """--""".r
+
+def htmlizePoemLine( line : String ) : String =
+  val step1 = PoemItalicsRegex.replaceAllIn(line, m => s"<i>${m.group(1)}</i>")
+  val step2 = SingleSpaceRegex.replaceAllIn(step1, m => "&nbsp;")
+  val step3 = EmDashRegex.replaceAllIn(step2, m => "&mdash;")
+  step3.trim
