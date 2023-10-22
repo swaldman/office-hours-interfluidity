@@ -33,7 +33,9 @@ object OfficeHoursInterfluidity extends RootModule with UntemplateModule with Pu
   override def ivyDeps = T{
     super.ivyDeps() ++ Agg(
       ivy"com.mchange::mchange-sysadmin-scala:0.1.2-SNAPSHOT",
+      ivy"com.mchange::codegenutil:0.0.2",
       ivy"com.lihaoyi::requests:0.8.0",
+      ivy"com.lihaoyi::upickle:3.1.3"
     )
   }
 

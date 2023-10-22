@@ -1,0 +1,68 @@
+import com.interfluidity.officehours.RandomPoem.Poem
+
+val (isoLocalDate, notesUrl, poem) = tup
+
+val title = s"Notes for ${isoLocalDate}"
+
+( tup : Tuple3[String,String,Poem])[]~()>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      * {
+          font-family: sans-serif;
+      }
+      body {
+          margin-top: 1.5rem;
+          margin-left: 3rem;
+          margin-right: 3rem;
+          background-color: white;
+      }
+      @media screen and (max-width: 700px) {
+        body {
+            margin-top: 0;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+      }
+    </style>
+    <title><( title )></title>
+  </head>
+  <body>
+    <h1><( title )></h1>
+    <p>Hi!</p>
+    
+    <p>
+      For your topicalizing, brainstorming, pre-agenda-izing displeasure,
+      <a href="<( notesUrl )>">notes for <i>interfluidity</i> office hours on <( isoLocalDate )></a>
+      are up and editable. <code>[<a href="<( notesUrl )>"><( notesUrl )></a>]</code>
+    </p>
+
+    <p>
+      Office hours will convene at 12:30pm Pacific / 1:30pm Mountain / 2:30pm Central / 3:30pm Eastern / 7:30pm UTC
+      <a href="https://www.interfluidity.com/office-hours">here</a>. <code>[<a href="https://www.interfluidity.com/office-hours">https://www.interfluidity.com/office-hours</a>]</code>
+    </p>
+    <p>
+      God help us, this is now an automated e-mail. If this annoys you, I'm really sorry for that. Please reply with some cussing to be removed with no fussing.
+    </p>
+    <div class="sign-off">Love,<br>&nbsp;&nbsp;<i>Office Hours Bot</div>
+
+    <p>p.s. Now, courtesy of <a href="https://poetrydb.org/index.html">poetrydb</a>, here is your random poem:</p>
+    <div class="poem">
+      <div class="poem-title"><( poem.title )></div>
+      <div class="poem-author">by <( poem.author )></div>
+      <div class="poem-lines">
+<()
+  poem.lines.foreach { line =>
+()>
+  <( line )>  
+<()
+  }
+()>  
+      </div>
+    </div>
+      
+  </body>
+</html>
+
+
