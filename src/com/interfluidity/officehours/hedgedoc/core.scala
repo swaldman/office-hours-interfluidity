@@ -29,7 +29,7 @@ object newNote:
       )
     val createResponse =
       session.post(
-        s"${stdurl}/new/${URLEncoder.encode(noteId)}",
+        s"${stdurl}/new/${URLEncoder.encode(noteId, scala.io.Codec.UTF8.charSet)}",
         data=initialMarkdown,
         maxRedirects=0,
         check=false

@@ -29,23 +29,22 @@ val title = s"Notes for ${isoLocalDate}"
     <title><( title )></title>
   </head>
   <body>
-    <h1><( title )></h1>
     <p>Hi!</p>
     
     <p>
       For your topicalizing, brainstorming, pre-agenda-izing displeasure,
       <a href="<( notesUrl )>">notes for <i>interfluidity</i> office hours on <( isoLocalDate )></a>
-      are up and editable. <code>[<a href="<( notesUrl )>"><( notesUrl )></a>]</code>
+      are up and editable.
     </p>
 
     <p>
       Office hours will convene at 12:30pm Pacific / 1:30pm Mountain / 2:30pm Central / 3:30pm Eastern / 7:30pm UTC
-      <a href="https://www.interfluidity.com/office-hours">here</a>. <code>[<a href="https://www.interfluidity.com/office-hours">https://www.interfluidity.com/office-hours</a>]</code>
+      <a href="https://www.interfluidity.com/office-hours">here</a>.
     </p>
     <p>
-      God help us, this is now an automated e-mail. If this annoys you, I'm really sorry for that. Please reply with some cussing to be removed with no fussing.
+      God help us, this is an automated e-mail. I'm really sorry for that. Please reply with some cussing to be removed with no fussing.
     </p>
-    <div class="sign-off">Love,<br>&nbsp;&nbsp;<i>Office Hours Bot</div>
+    <div class="sign-off">Love,<br>&nbsp;&nbsp;<i>Office Hours Bot</i></div>
 
     <p>p.s. Now, courtesy of <a href="https://poetrydb.org/index.html">poetrydb</a>, here is your random poem:</p>
     <div class="poem">
@@ -55,7 +54,7 @@ val title = s"Notes for ${isoLocalDate}"
 <()
   poem.lines.foreach { line =>
 ()>
-  <( line )>  
+  <( line )><br>  
 <()
   }
 ()>  

@@ -127,7 +127,7 @@ def createInitialMarkdown(isoLocalDate : String) : String =
       |""".stripMargin
 
 def createNote(isoLocalDate : String, hedgedocUrl : String, noteOwnerEmail : String, noteOwnerPassword : String) : ( String, hedgedoc.newNote.Result ) =
-  val newNoteId = s"Office-Hours-${isoLocalDate}"
+  val newNoteId = s"office-hours-${isoLocalDate}"
   val result = hedgedoc.newNote(hedgedocUrl,noteOwnerEmail,noteOwnerPassword,newNoteId,createInitialMarkdown(isoLocalDate) )
   ( newNoteId, result )
 
@@ -141,19 +141,19 @@ def plaintextMailContent( isoLocalDate : String, newNoteUrl : String, poem : Ran
         |Office hours will convene at 12:30pm Pacific / 1:30pm Mountain / 2:30pm Central / 3:30pm Eastern / 
         |7:30pm UTC @ https://www.interfluidity.com/office-hours
         |
-        |God help us, this is now an automated e-mail. If this annoys you, I'm really sorry for that. Please
-        |reply with some cussing to be removed with no fussing.
+        |God help us, this is an automated e-mail. I'm really sorry for that. Please reply with some
+        |cussing to be removed with no fussing.
         |
         |    Love,
         |      Office Hours Bot
         |
         |p.s. Now, courtesy of poetrydb, here is your random poem:
         |
-        |""".stripIndent
+        |""".stripMargin
   val poemPart =
     val header =
       s"""|${poem.title}
           |    by ${poem.author}
-          |""".stripIndent
+          |""".stripMargin
     header + poem.lines.mkString("\n")      
   mainText + increaseIndent(4)(poemPart)
