@@ -11,9 +11,9 @@ object OfficeHoursInterfluidity extends RootModule with UntemplateModule with Pu
 
   override def scalaVersion = "3.3.1"
 
-//  def scalacOptions = T {
-//    super.scalacOptions() ++ Seq("-explain")
-//  }
+  def scalacOptions = T {
+    super.scalacOptions() :+ "-deprecation" :+ "-explain"
+  }
 
   override def artifactName = "office-hours-interfluidity"
   override def publishVersion = T{"0.0.1-SNAPSHOT"}
@@ -52,6 +52,10 @@ object OfficeHoursInterfluidity extends RootModule with UntemplateModule with Pu
 
     out
   }
+
+  val MchangeStaging = "/Users/swaldman/Sync/BaseFolders/development-why/gitproj/www.mchange.com/repository"
+
+  def publishMchange() = this.publishLocal( MchangeStaging )
 }
 
 
