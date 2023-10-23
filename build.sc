@@ -16,7 +16,7 @@ object OfficeHoursInterfluidity extends RootModule with UntemplateModule with Pu
   }
 
   override def artifactName = "office-hours-interfluidity"
-  override def publishVersion = T{"0.0.1-SNAPSHOT"}
+  override def publishVersion = T{"0.0.1"}
   override def pomSettings    = T{
     PomSettings(
       description = "Automate management of interfluidity office hours",
