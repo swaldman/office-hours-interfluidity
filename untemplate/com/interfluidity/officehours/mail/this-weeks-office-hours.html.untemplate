@@ -1,116 +1,8 @@
 import com.interfluidity.officehours.RandomPoem.Poem
-import com.interfluidity.officehours.htmlizePoemLine
 
 val (isoLocalDate, notesUrl, poem) = tup
 
-val title = s"Notes for ${isoLocalDate}"
-
-( tup : Tuple3[String,String,Poem])[]~()>
-<!DOCTYPE html>
-<html>
-  <head>
-  <style>
-      @font-face {
-         font-family: 'Montserrat';
-         src: url('https://www.interfluidity.com/microblog-archives/fosstodon/font/Montserrat/Montserrat-VariableFont_wght.ttf');
-      }
-      @font-face {
-         font-family: 'Montserrat-Italic';
-         src: url('https://www.interfluidity.com/microblog-archives/fosstodon/font/Montserrat/Montserrat-Italic-VariableFont_wght.ttf');
-      }
-      @font-face {
-         font-family: 'Cormorant';
-         src: url('https://www.interfluidity.com/files/fonts/Cormorant/Cormorant-VariableFont_wght.ttf');
-      }
-      @font-face {
-         font-family: 'Cormorant-Italic';
-         src: url('https://www.interfluidity.com/files/fonts/Cormorant/Cormorant-Italic-VariableFont_wght.ttf');
-      }
-      body {
-          margin: 0;
-          padding: 0;
-          background-color: #000020;
-          background-image: url("https://www.interfluidity.com/files/interfluidity_bg_large.jpg");
-          font-family: 'Montserrat', sans-serif;
-          font-variation-settings: "wght" 350;
-          display: grid;
-          grid-template-columns: auto 600px auto;
-          grid-template-rows: auto;
-      }
-      em, i {
-          font-family: 'Montserrat-Italic', sans-serif;
-          font-style: oblique 0deg;
-      }
-      strong, b {
-        font-variation-settings: "wght" 600;
-      }
-      .left-sidebar {
-          grid-column: 1;
-          grid-row:    1;
-      }
-      .main-content {
-          padding-left: 2rem;
-          padding-right: 2rem;
-          background-color: white;
-          grid-column: 2;
-          grid-row:    1;
-      }
-      .right-sidebar {
-          grid-column: 3;
-          grid-row:    1;
-      }
-      .sign-off {
-          margin-left: 2rem;
-      }
-      .poem {
-          font-family: 'Cormorant', serif;
-          font-variation-settings: "wght" 450;
-          margin-left: auto;
-          margin-right: auto;
-          margin-bottom: 1rem;
-          padding: 1rem;
-          width: max-content;
-          background-color: #FFFEF2;
-          border: 1px solid gray;
-      }
-      .poem em, .poem i {
-        font-family: 'Cormorant-Italic', serif;
-        font-style: oblique 0deg;
-      }
-      .poem-title {
-        font-weight: bold;
-        font-variation-settings: "wght" 600;
-        font-size: 110%;
-      }
-      .poem-author {
-          font-family: 'Cormorant-Italic', serif;
-          margin-left: 1rem;
-      }
-      .poem-lines {
-          margin-top: 1rem;
-          line-height: 140%;
-      }
-      @media screen and (max-width: 700px) {
-        body {
-          grid-template-columns: 2rem auto 2rem;
-        }
-        .poem {
-            margin-left: 0;
-            margin-right: 1rem;
-            margin-bottom: 1rem;
-            padding: 1rem;
-        }
-      }
-    </style>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><( title )></title>
-  </head>
-  <body>
-    <div class="left-sidebar"></div>
-    <div class="main-content">
-      <p>Hi!</p>
-
+( tup : Tuple3[String,String,Poem])[]~(.variableContent)>
       <p>
         For your topicalizing, brainstorming, pre-agenda-izing displeasure,
         <a href="<( notesUrl )>">notes for <i>interfluidity</i> office hours on <( isoLocalDate )></a>
@@ -121,28 +13,6 @@ val title = s"Notes for ${isoLocalDate}"
         Office hours will convene at 12:30pm Pacific / 1:30pm Mountain / 2:30pm Central / 3:30pm Eastern / 7:30pm UTC
         <a href="https://www.interfluidity.com/office-hours">here</a>.
       </p>
-      <p>
-        God help us, this is an automated e-mail. I'm really sorry for that. Please reply with some cussing to be removed with no fussing.
-      </p>
-      <div class="sign-off">Love,<br>&nbsp;&nbsp;<i>Office Hours Bot</i></div>
-
-      <p>p.s. Now, courtesy of <a href="https://poetrydb.org/index.html">poetrydb</a>, here is your random poem:</p>
-      <div class="poem">
-        <div class="poem-title"><( poem.title )></div>
-        <div class="poem-author">by <( poem.author )></div>
-        <div class="poem-lines">
 <()
-  poem.lines.foreach { line =>
-()>
-    <( htmlizePoemLine(line) )><br>  
-<()
-  }
-()>  
-        </div>
-      </div>
-    </div> <!-- main-content -->
-    <div class="right-sidebar"></div>
-  </body>
-</html>
-
-
+  writer.write( layout_main_html( isoLocalDate, poem, variableContent() ).text )
+  

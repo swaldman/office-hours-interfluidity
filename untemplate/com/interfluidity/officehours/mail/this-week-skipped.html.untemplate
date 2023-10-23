@@ -1,0 +1,19 @@
+import com.interfluidity.officehours.RandomPoem.Poem
+
+val (isoLocalDate, reason, poem) = tup
+
+( tup : Tuple3[String,String,Poem])[]~(.variableContent)>
+      <p>
+        This week's <i>interfluidity</i> office hours, scheduled for <( isoLocalDate )>,
+        have, alas, been canceled.  
+      </p>
+
+      <p>
+        The deadbeat organizer gave the following reason: 
+      </p>
+      <blockquote>
+        <p><( reason )></p>
+      </blockquote>
+<()
+  writer.write( layout_main_html( isoLocalDate, poem, variableContent() ).text )
+  

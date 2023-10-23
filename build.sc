@@ -12,7 +12,7 @@ object OfficeHoursInterfluidity extends RootModule with UntemplateModule with Pu
   override def scalaVersion = "3.3.1"
 
   def scalacOptions = T {
-    super.scalacOptions() :+ "-deprecation" :+ "-explain"
+    super.scalacOptions() :+ "-deprecation" /* :+ "-explain" */
   }
 
   override def artifactName = "office-hours-interfluidity"
