@@ -127,12 +127,13 @@ def createNote(isoLocalDate : String, hedgedocUrl : String, noteOwnerEmail : Str
   ( newNoteId, result )
 
 def plaintextNewNoteContent( isoLocalDate : String, newNoteUrl : String, poem : RandomPoem.Poem ) : String =
+  val t = Times(isoLocalDate)
   val variableText =
     s"""|For your topicalizing, brainstorming, pre-agenda-izing displeasure, notes for interfluidity office
         |hours on ${isoLocalDate} are up and editable. [ ${newNoteUrl} ]
         |
-        |Office hours will convene at 12:30pm Pacific / 1:30pm Mountain / 2:30pm Central / 3:30pm Eastern / 
-        |7:30pm UTC @ https://www.interfluidity.com/office-hours""".stripMargin
+        |Office hours will convene at ${t.P} Pacific / ${t.M} Mountain / ${t.C} Central / ${t.E} Eastern / 
+        |${t.U} UTC @ https://www.interfluidity.com/office-hours""".stripMargin
   plaintextAnyContent( isoLocalDate, poem, variableText )
 
 def plaintextSkippedContent( isoLocalDate : String, reason : String, poem : RandomPoem.Poem ) : String =

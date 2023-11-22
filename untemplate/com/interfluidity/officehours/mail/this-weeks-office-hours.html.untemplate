@@ -1,27 +1,8 @@
 import com.interfluidity.officehours.RandomPoem.Poem
 
-import java.time.*
-import java.time.format.DateTimeFormatter
-import DateTimeFormatter.ISO_LOCAL_DATE
-
 val (isoLocalDate, notesUrl, poem) = tup
 
-val TimePrinter = DateTimeFormatter.ofPattern("hh:mmaa")
-
-val meetingDate = LocalDate.from( ISO_LOCAL_DATE.parse(isoLocalDate) )
-val easternMeetingTime = meetingDate.atTime(15,30).atZone( ZoneId.of("US/Eastern") )
-val centralMeetingTime = easternMeetingTime.withZoneSameInstant( ZoneId.of("US/Central") )
-val mountainMeetingTime = easternMeetingTime.withZoneSameInstant( ZoneId.of("US/Mountain") )
-val pacificMeetingTime = easternMeetingTime.withZoneSameInstant( ZoneId.of("US/Pacific") )
-val utcMeetingTime = easternMeetingTime.withZoneSameInstant( ZoneId.of("UTC") )
-
-def printTime( zdt : ZonedDateTime ) : String = TimePrinter.format(zdt).toLowerCase
-
-val E = printTime(easternMeetingTime)
-val C = printTime(centralMeetingTime)
-val M = printTime(mountainMeetingTime)
-val P = printTime(pacificMeetingTime)
-val U = printTime(utcMeetingTime)
+val t = com.interfluidity.officehours.Times(isoLocalDate)
 
 ( tup : Tuple3[String,String,Poem])[]~(.variableContent)>
       <p>
@@ -31,7 +12,7 @@ val U = printTime(utcMeetingTime)
       </p>
 
       <p>
-        Office hours will convene at <( P )> Pacific / <( M )> Mountain / <( C )> Central / <( E )> Eastern / <( U )> UTC
+        Office hours will convene at <( t.P )> Pacific / <( t.M )> Mountain / <( t.C )> Central / <( t.E )> Eastern / <( t.U )> UTC
         <a href="https://www.interfluidity.com/office-hours">here</a>.
       </p>
 <()
