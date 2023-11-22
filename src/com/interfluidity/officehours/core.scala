@@ -10,7 +10,8 @@ import java.util.{Date,Properties}
 import scala.util.Using
 import scala.util.control.NonFatal
 
-import com.mchange.sysadmin.{debugPrettyPrintHtml,prettyPrintHtml,Smtp}
+import com.mchange.sysadmin.{debugPrettyPrintHtml,prettyPrintHtml}
+import com.mchange.mailutil.Smtp
 import com.mchange.codegenutil.increaseIndent
 
 import jakarta.mail.Message
