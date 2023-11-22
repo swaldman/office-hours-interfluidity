@@ -61,19 +61,10 @@ def createAndSendThisWeeksNote( properties : Properties ) : Unit =
       Prop.get(properties)(Prop.NotesMailFrom, Prop.NotesMailReplyTo, Prop.NotesMailTo) match
         case Left( missingKeys ) => throw new BadConfig( "Missing mail properties: " + missingKeys.mkString(", ") )
         case Right( seqm ) =>
-          val mailFroms    = parseOutAddresses(seqm(0))
-          val mailReplyTos = parseOutAddresses(seqm(1))
-          val mailTos      = parseOutAddresses(seqm(2))
-          val mailFrom =
-            if mailFroms.size != 1 then
-              throw new BadConfig(s"There should be precisely one from address, found ${mailFroms.size}: " + seqm(0))
-            else
-              mailFroms.head
-          sendThisWeeksMail( isoLocalDate, doCreateNote, mailFrom, mailReplyTos, mailTos, mbSkipReason )
-
-val MailParseRegexStr = """\s*\,\s*"""
-
-def parseOutAddresses( s : String ) : List[String] = s.split(MailParseRegexStr).toList
+          val mailFroms    = seqm(0)
+          val mailReplyTos = seqm(1)
+          val mailTos      = seqm(2)
+          sendThisWeeksMail( isoLocalDate, doCreateNote, mailFroms, mailReplyTos, mailTos, mbSkipReason )
 
 def nextFridayIsoLocalDate() =
   val upcomingFriday = // this made it easy... https://www.w3resource.com/java-exercises/datetime/java-datetime-exercise-33.php
@@ -93,8 +84,8 @@ def sendThisWeeksMail(
   isoLocalDate : String,
   doCreateNote : () => String, // we defer this until we've checked whether office hours are skipped
   from : String,
-  replyToAddresses : Seq[String],
-  toAddresses : Seq[String],
+  replyTo : String,
+  to : String,
   mbSkipReason : Option[String]
 )(using smtpContext : Smtp.Context) : Unit =
   val poem =
@@ -120,8 +111,8 @@ def sendThisWeeksMail(
     plaintext = plainText,
     subject = subject,
     from = from,
-    to = toAddresses,
-    replyTo = replyToAddresses
+    to = to,
+    replyTo = replyTo
   )
 
 def createInitialMarkdown(isoLocalDate : String) : String =
