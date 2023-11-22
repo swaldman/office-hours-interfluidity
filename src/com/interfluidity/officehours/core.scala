@@ -70,7 +70,7 @@ def createAndSendThisWeeksNote( properties : Properties ) : Unit =
             else
               mailFroms.head
           sendThisWeeksMail( isoLocalDate, doCreateNote, mailFrom, mailReplyTos, mailTos, mbSkipReason )
-      
+
 val MailParseRegexStr = """\s*\,\s*"""
 
 def parseOutAddresses( s : String ) : List[String] = s.split(MailParseRegexStr).toList
@@ -93,8 +93,8 @@ def sendThisWeeksMail(
   isoLocalDate : String,
   doCreateNote : () => String, // we defer this until we've checked whether office hours are skipped
   from : String,
-  replyToAddresses : List[String],
-  toAddresses : List[String],
+  replyToAddresses : Seq[String],
+  toAddresses : Seq[String],
   mbSkipReason : Option[String]
 )(using smtpContext : Smtp.Context) : Unit =
   val poem =
@@ -111,30 +111,19 @@ def sendThisWeeksMail(
       case None =>
         val newNoteUrl = doCreateNote()
         ( mail.this_weeks_office_hours_html( isoLocalDate, newNoteUrl, poem ).text, plaintextNewNoteContent( isoLocalDate, newNoteUrl, poem ) )
-  val msg = new MimeMessage(smtpContext.session)
-  val htmlAlternative =
-    val tmp = new MimeBodyPart()
-    def pretty =
-      //debugPrettyPrintHtml(htmlText)
-      prettyPrintHtml(htmlText)
-    tmp.setContent(pretty, "text/html")
-    tmp
-  val plainTextAlternative =
-    val tmp = new MimeBodyPart()
-    tmp.setContent(plainText, "text/plain")
-    tmp
-  // last entry is highest priority!
-  val multipart = new MimeMultipart("alternative", plainTextAlternative, htmlAlternative)
-  msg.setContent(multipart)
-  msg.setSubject(s"[interfluidity-office-hours] Notes for ${isoLocalDate}")
-  msg.setFrom(new InternetAddress(from))
-  msg.setReplyTo( replyToAddresses.map( em => InternetAddress(em) ).toArray )
-  toAddresses.foreach: em =>
-    msg.addRecipient(Message.RecipientType.TO, new InternetAddress(em))
-  msg.setSentDate(new Date())
-  msg.saveChanges()
-  smtpContext.sendMessage(msg)
- 
+  val prettyHtml =
+    //debugPrettyPrintHtml(htmlText)
+    prettyPrintHtml(htmlText)
+  val subject = s"[interfluidity-office-hours] Notes for ${isoLocalDate}"
+  Smtp.sendSimpleHtmlPlaintextAlternative(
+    html = prettyHtml,
+    plaintext = plainText,
+    subject = subject,
+    from = from,
+    to = toAddresses,
+    replyTo = replyToAddresses
+  )
+
 def createInitialMarkdown(isoLocalDate : String) : String =
   s"""|# Office Hours ${isoLocalDate}
       |
