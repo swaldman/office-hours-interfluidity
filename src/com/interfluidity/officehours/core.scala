@@ -1,12 +1,13 @@
 package com.interfluidity.officehours
 
-import java.time.{DayOfWeek, LocalDate}
+import java.time.{DayOfWeek, Duration, LocalDate}
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 import java.time.temporal.TemporalAdjusters
 
 import java.io.BufferedInputStream
 import java.util.{Date,Properties}
 
+import scala.annotation.tailrec
 import scala.util.Using
 import scala.util.control.NonFatal
 
@@ -71,6 +72,35 @@ def nextFridayIsoLocalDate() =
     LocalDate.now().`with`(TemporalAdjusters.next(DayOfWeek.FRIDAY))
   ISO_LOCAL_DATE.format(upcomingFriday)
 
+val MeetingNotesBase = "https://notes.interfluidity.com/office-hours-"
+val Days90 = Duration.ofDays(90)
+
+@tailrec
+def mostRecentMeetingNotesUrlBefore( startCheckDate : LocalDate, checkDate : LocalDate ) : Option[String] =
+  val day = checkDate.`with`(TemporalAdjusters.previous(DayOfWeek.FRIDAY))
+  val url = MeetingNotesBase + ISO_LOCAL_DATE.format(day)
+  val r = requests.head(url, check = false)
+  (r.statusCode / 100) match
+    case 2     => Some( url )
+    case 3 | 4 =>
+      if Duration.between( day.atTime(0,0,0), startCheckDate.atTime(0,0,0) ).compareTo( Days90 ) > 0 then
+        System.err.println( "No meeting notes were found in the past 90 days." )
+        None
+      else
+        mostRecentMeetingNotesUrlBefore( startCheckDate, day )
+    case other =>
+      System.err.println( s"Something went wrong while searching for previous meeting notes, response code ${r.statusCode}, response: ${r}" )
+      None
+
+def mostRecentMeetingNotesUrlBefore( isoLocalDate : String ) : Option[String] =
+  try
+    val meetingDay = LocalDate.from( ISO_LOCAL_DATE.parse(isoLocalDate) )
+    mostRecentMeetingNotesUrlBefore( meetingDay, meetingDay )
+  catch
+    case t : Throwable =>
+      t.printStackTrace()
+      None
+
 // returns note URL
 def createThisWeeksNote(isoLocalDate : String, hedgedocUrl : String, noteOwnerEmail : String, noteOwnerPassword : String) : String =
   val ( _, result ) = createNote(isoLocalDate, hedgedocUrl, noteOwnerEmail, noteOwnerPassword)
@@ -116,9 +146,18 @@ def sendThisWeeksMail(
   )
 
 def createInitialMarkdown(isoLocalDate : String) : String =
+  val priorNotesUrl = mostRecentMeetingNotesUrlBefore( isoLocalDate : String )
+
+  val priorNotesMessage = priorNotesUrl.fold(""): url =>
+    "_Please find our previous meeting's notes [here](${url})._"
+    
   s"""|# Office Hours ${isoLocalDate}
       |
-      |_Start your edits!_
+      |${priorNotesMessage}
+      |
+      |---
+      |
+      |Delete me, and start your edits here!
       |""".stripMargin
 
 def createNote(isoLocalDate : String, hedgedocUrl : String, noteOwnerEmail : String, noteOwnerPassword : String) : ( String, hedgedoc.newNote.Result ) =
