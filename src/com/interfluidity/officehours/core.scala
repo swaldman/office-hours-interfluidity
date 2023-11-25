@@ -20,7 +20,7 @@ import jakarta.mail.internet.*
 
 object Prop:
   val HedgedocUrl      = "officehours.hedgedoc.url"
-  val HedgedocEmail    = "officehours.hedgedoc.email"
+  val HedgedocEmail    = "officehours.hedgedoc.email" // the e-mail serving as the username to which this app should authenticate
   val HedgedocPassword = "officehours.hedgedoc.password"
   val NotesMailFrom    = "officehours.notesmail.from"
   val NotesMailTo      = "officehours.notesmail.to"
@@ -41,7 +41,21 @@ end Prop
 
 object Env:
   val OfficeHoursPropsFile = "OFFICE_HOURS_PROPSFILE"
-end Env  
+end Env
+
+object Test:
+  lazy val properties =
+    import Prop.*
+    val tmp = new Properties()
+    tmp.setProperty(HedgedocUrl, "https://notes.interfluidity.com/")
+    tmp.setProperty(HedgedocEmail, "swaldman@mchange.com")
+    tmp.setProperty(HedgedocPassword, System.console().readPassword("Please enter the hedgedoc password: ").mkString)
+    tmp.setProperty(NotesMailFrom, "sysadmin@mchange.com")
+    tmp.setProperty(NotesMailTo, "swaldman@mchange.com")
+    tmp.setProperty(NotesMailReplyTo, "swaldman@mchange.com")
+    tmp
+  def createAndSendTestNote() : Unit =
+    createAndSendThisWeeksNote( properties )
 
 def createAndSendThisWeeksNote() : Unit =
   val propsFilePath = 
@@ -79,7 +93,7 @@ val Days90 = Duration.ofDays(90)
 def mostRecentMeetingNotesUrlBefore( startCheckDate : LocalDate, checkDate : LocalDate ) : Option[String] =
   val day = checkDate.`with`(TemporalAdjusters.previous(DayOfWeek.FRIDAY))
   val url = MeetingNotesBase + ISO_LOCAL_DATE.format(day)
-  val r = requests.head(url, check = false)
+  val r = requests.head(url, check = false, maxRedirects = 0)
   (r.statusCode / 100) match
     case 2     => Some( url )
     case 3 | 4 =>
@@ -149,7 +163,7 @@ def createInitialMarkdown(isoLocalDate : String) : String =
   val priorNotesUrl = mostRecentMeetingNotesUrlBefore( isoLocalDate : String )
 
   val priorNotesMessage = priorNotesUrl.fold(""): url =>
-    "_Please find our previous meeting's notes [here](${url})._"
+    s"_Here are our [previous meeting's notes](${url})._"
     
   s"""|# Office Hours ${isoLocalDate}
       |
@@ -157,7 +171,7 @@ def createInitialMarkdown(isoLocalDate : String) : String =
       |
       |---
       |
-      |Delete me, and start your edits here!
+      |**Delete me, and start your edits here!**
       |""".stripMargin
 
 def createNote(isoLocalDate : String, hedgedocUrl : String, noteOwnerEmail : String, noteOwnerPassword : String) : ( String, hedgedoc.newNote.Result ) =

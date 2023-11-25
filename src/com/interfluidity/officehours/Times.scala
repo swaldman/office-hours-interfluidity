@@ -8,7 +8,7 @@ object Times:
   val MeetingHourE   = 15
   val MeetingMinuteE = 30
 
-  val TimePrinter = DateTimeFormatter.ofPattern("hh:mmaa")
+  val TimePrinter = DateTimeFormatter.ofPattern("hh:mma")
 
   def printTime( zdt : ZonedDateTime ) : String = TimePrinter.format(zdt).toLowerCase
 
