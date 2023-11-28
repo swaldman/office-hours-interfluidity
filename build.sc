@@ -16,7 +16,7 @@ object OfficeHoursInterfluidity extends RootModule with UntemplateModule with Pu
   }
 
   override def artifactName = "office-hours-interfluidity"
-  override def publishVersion = T{"0.0.2-SNAPSHOT"}
+  override def publishVersion = T{"0.0.2"}
   override def pomSettings    = T{
     PomSettings(
       description = "Automate management of interfluidity office hours",
@@ -33,7 +33,7 @@ object OfficeHoursInterfluidity extends RootModule with UntemplateModule with Pu
   override def ivyDeps = T{
     super.ivyDeps() ++ Agg(
       ivy"com.mchange::mailutil:0.0.1",
-      ivy"com.mchange::mchange-sysadmin-scala:0.1.3-SNAPSHOT",
+      ivy"com.mchange::mchange-sysadmin-scala:0.1.3",
       ivy"com.mchange::codegenutil:0.0.2",
       ivy"com.lihaoyi::requests:0.8.0",
       ivy"com.lihaoyi::upickle:3.1.3"
