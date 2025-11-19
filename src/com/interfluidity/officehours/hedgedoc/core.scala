@@ -37,6 +37,6 @@ object newNote:
     createResponse.statusCode match
       case 302 => Result.Created(s"${stdurl}/${noteId}") // this is what we expect if it worked, it tries to redirect
       case 409 => Result.AlreadyExists(s"${stdurl}/${noteId}")
-      case oth => Result.Failed(oth, createResponse.statusMessage)
+      case oth => Result.Failed(oth, createResponse.toString())
   end apply
 end newNote
