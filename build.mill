@@ -51,7 +51,7 @@ object `package` extends UntemplateModule with PublishModule:
 
     out
 
-  val MchangeStaging = "/Users/swaldman/Sync/BaseFolders/development-why/gitproj/www.mchange.com/repository"
+  val MchangeStaging = "/Users/swaldman/development/gitproj/www.mchange.com/repository"
 
   def publishMchange() = this.publishM2Local( MchangeStaging )
 
